@@ -8,7 +8,7 @@ namespace VoltSignature.PostgreSQL.Configuration
     {
         public override void Configure(EntityTypeBuilder<Signature> entity)
         {
-            entity.HasOne(x => x.Sender).WithMany(x => x.UserSignaturesSendHistory).HasForeignKey(x => x.SenderId);
+        
         }
     }
 }

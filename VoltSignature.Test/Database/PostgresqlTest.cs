@@ -29,25 +29,34 @@ namespace VoltSignature.Test.Database
             DbSignatureContext context = BuildContext();
             CompanyRepository _companyRepository = new CompanyRepository(context);
             UserRepository _userRepository = new UserRepository(context);
-            var u = _userRepository.Get(x => x.CompanyId == 4).Result;
-            //Role r1 = new Role()
-            //{
-            //    Name = "User"
-            //};
-            //Role r2 = new Role()
-            //{
-            //    Name = "CompanyAdmin"
-            //};
-            //Role r3 = new Role()
-            //{
-            //    Name = "Admin"
-            //};
-            //context.Roles.AddRange(r1, r2, r3);
-            //context.SaveChanges();
 
+            Role r1 = new Role()
+            {
+                Name = "User"
+            };
+            Role r2 = new Role()
+            {
+                Name = "CompanyAdmin"
+            };
+            Role r3 = new Role()
+            {
+                Name = "Admin"
+            };
+            context.Roles.AddRange(r1, r2, r3);
+            context.SaveChanges();
+
+            Company c = new Company()
+            {
+                Name = "ABC motors",
+                RegisterDate = DateTime.UtcNow,
+            };
+            _companyRepository.Create(c).Wait();
+ 
+   
+            //var company = context.Companies.FirstOrDefault();
             User u1 = new User()
             {
-                CompanyId = 4,
+                CompanyId = c.Id,
                 Email = "test@email.com",
                 FirstName = "Test1",
                 LastName = "test2",
@@ -58,17 +67,32 @@ namespace VoltSignature.Test.Database
                 Position = "Manger"
             };
             _userRepository.Create(u1).Wait();
+            c.OwnerId = u1.Id;
+            _companyRepository.Update(c).Wait();
 
-            //Company c = new Company()
-            //{
-            //    Name = "ABC Motors",
-            //    RegisterDate = DateTime.UtcNow,
-            //    //OwnerId = 0
-            //};
-            //_companyRepository.Create(c).Wait();
-            var company = context.Companies.Include(x=>x.Owner).FirstOrDefault();
-            Company c = _companyRepository.Get(x => x.Id == 4,include=>include.Include(x=>x.Owner)).Result; 
+            Signature s = new Signature()
+            {
+                FileId = "asdaa",
+                CreateDate = DateTime.UtcNow
+            };
+             
+            context.Signatures.Add(s);
+            context.SaveChanges();
+            UserSignature us = new UserSignature()
+            {
+                SignatureId = s.Id,
+                UserId = u1.Id
+            };
+            context.UserSignatures.Add(us);
+            context.SaveChanges();
+            Company cc = _companyRepository.Get(x => x.Id == 4,include=>include.Include(x=>x.Owner)).Result; 
+            var t1 = context.Signatures.FirstOrDefault();
+            var t2 = context.UserSignatures.FirstOrDefault();
 
+           var t12 = context.Signatures.Include(x => x.UserSignatures).FirstOrDefault();
+            var asd = context.Companies.FirstOrDefault(x => x.Name == "BSI");
+            var user = context.Users.FirstOrDefault();
+           var company = context.Companies.FirstOrDefault();
 
             context.Dispose();
         }

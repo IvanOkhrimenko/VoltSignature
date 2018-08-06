@@ -4,6 +4,7 @@
     {
         public int Id { get; set; }
         public byte[] SignatureHash { get; set; }
+        public bool IsSender { get; set; }
 
         public int UserId { get; set; }
         public int SignatureId { get; set; }

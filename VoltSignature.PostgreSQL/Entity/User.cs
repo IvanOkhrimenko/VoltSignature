@@ -23,8 +23,7 @@ namespace VoltSignature.PostgreSQL.Entity
 
         public virtual Role UserRole { get; set; }
         public virtual Company Company { get; set; }
-        public virtual Company OwnCompany { get; set; }
-        public virtual List<Signature> UserSignaturesSendHistory { get; set; }
-        public virtual List<UserSignature> UserSignatures { get; set; }
+        public virtual Company OwnCompany { get; set; } 
+        public virtual ICollection<UserSignature> UserSignatures { get; set; }
     }
 }

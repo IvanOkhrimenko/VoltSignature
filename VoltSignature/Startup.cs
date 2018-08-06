@@ -25,9 +25,9 @@ namespace VoltSignature
         public void ConfigureServices(IServiceCollection services)
         {
             string connectionString = "Host=localhost;Port=5432;Database=SignatureDb;Username=postgres;Password=fsgpsa";
-             services.AddDbContext<DbSignatureContext>(option => option.UseNpgsql(connectionString, b => b.MigrationsAssembly("VoltSignature")));
-            //string connectionString = "Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=VoltSignatureDb;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False";
-            //services.AddDbContext<DbSignatureContext>(option => option.UseSqlServer(connectionString, b => b.MigrationsAssembly("VoltSignature")));
+            services.AddDbContext<DbSignatureContext>(option => option.UseNpgsql(connectionString, b => b.MigrationsAssembly("VoltSignature")));
+           // string connectionString = "Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=VoltSignatureDb;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False";
+         //   services.AddDbContext<DbSignatureContext>(option => option.UseSqlServer(connectionString, b => b.MigrationsAssembly("VoltSignature")));
             services.AddMvc();
         }
 
