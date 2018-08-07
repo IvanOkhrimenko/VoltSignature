@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.SpaServices.Webpack;
@@ -9,6 +10,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using VoltSignature.PostgreSQL.Context;
+using VoltSignature.Repository.Interface;
+using VoltSignature.Repository.Storage;
 
 namespace VoltSignature
 {
@@ -24,11 +27,24 @@ namespace VoltSignature
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            string connectionString = "Host=localhost;Port=5432;Database=SignatureDb;Username=postgres;Password=fsgpsa";
-            services.AddDbContext<DbSignatureContext>(option => option.UseNpgsql(connectionString, b => b.MigrationsAssembly("VoltSignature")));
-           // string connectionString = "Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=VoltSignatureDb;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False";
-         //   services.AddDbContext<DbSignatureContext>(option => option.UseSqlServer(connectionString, b => b.MigrationsAssembly("VoltSignature")));
-            services.AddMvc();
+            string PostgresConnectionString = "Host=localhost;Port=5432;Database=SignatureDb;Username=postgres;Password=fsgpsa";
+            //string MSSQLconnectionString = "Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=VoltSignatureDb;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False";
+           
+
+            services.AddDbContext<DbSignatureContext>(options => options
+                                                                .UseNpgsql(PostgresConnectionString, b => b.MigrationsAssembly("VoltSignature"))
+                                                                //.UseSqlServer(MSSQLconnectionString, b => b.MigrationsAssembly("VoltSignature"))
+                                                                ); 
+
+            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+                     .AddCookie(options =>
+                     {
+                         options.LoginPath = new Microsoft.AspNetCore.Http.PathString("/Account/Login");
+                     });
+
+            AddServices(services);
+
+            services.AddMvc(); 
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -51,8 +67,14 @@ namespace VoltSignature
              
             app.UseStaticFiles();
 
+            app.UseAuthentication();
+
             app.UseMvc(routes =>
             {
+                routes.MapRoute(
+                    name: "Login",
+                    template: "{controller=Account}/{action=Login}/{id?}");
+
                 routes.MapRoute(
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
@@ -61,6 +83,11 @@ namespace VoltSignature
                     name: "spa-fallback",
                     defaults: new { controller = "Home", action = "Index" });
             });
+        }
+
+        public void AddServices(IServiceCollection services)
+        {
+            services.AddTransient<IStorage, Storage>();
         }
     }
 }
