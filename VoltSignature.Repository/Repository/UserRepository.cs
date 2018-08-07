@@ -40,5 +40,7 @@ namespace VoltSignature.Repository.Repository
         {
             await CreateBase(_context.Users, user);
         }
+
+        public override Type GetEntityType() => typeof(User);
     }
 }

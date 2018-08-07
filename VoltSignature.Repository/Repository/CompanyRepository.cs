@@ -42,5 +42,7 @@ namespace VoltSignature.Repository.Repository
         {
             await CreateBase(_context.Companies, company);
         }
+
+        public override Type GetEntityType() => typeof(Company); 
     }
 }

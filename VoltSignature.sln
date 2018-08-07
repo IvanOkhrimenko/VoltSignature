@@ -11,9 +11,17 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VoltSignature.PostgreSQL", 
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{4914B0A5-EAD1-4BC6-8B1A-762F5C9CF99E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VoltSignature.Test", "VoltSignature.Test\VoltSignature.Test.csproj", "{C98886F1-3F85-46FC-A5E2-37929C923FD7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VoltSignature.Test", "VoltSignature.Test\VoltSignature.Test.csproj", "{C98886F1-3F85-46FC-A5E2-37929C923FD7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VoltSignature.Repository", "VoltSignature.Repository\VoltSignature.Repository.csproj", "{45E6375F-457A-4707-8E15-9BC88517E69B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VoltSignature.Repository", "VoltSignature.Repository\VoltSignature.Repository.csproj", "{45E6375F-457A-4707-8E15-9BC88517E69B}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Infrastructure", "Infrastructure", "{7360EE56-E559-44F4-A213-64284EB1667D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VoltSignature.Interface", "VoltSignature.Interface\VoltSignature.Interface.csproj", "{FA5585E7-35BD-4BF4-8411-0DF6B8E3B878}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VoltSignature.Core", "VoltSignature.Core\VoltSignature.Core.csproj", "{B7001720-2731-487C-8AA2-DDEBA626B57C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VoltSignature.Model", "VoltSignature.Model\VoltSignature.Model.csproj", "{8A272092-AEF9-423E-80F6-2AF2259E7746}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -37,6 +45,18 @@ Global
 		{45E6375F-457A-4707-8E15-9BC88517E69B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{45E6375F-457A-4707-8E15-9BC88517E69B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{45E6375F-457A-4707-8E15-9BC88517E69B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FA5585E7-35BD-4BF4-8411-0DF6B8E3B878}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FA5585E7-35BD-4BF4-8411-0DF6B8E3B878}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FA5585E7-35BD-4BF4-8411-0DF6B8E3B878}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FA5585E7-35BD-4BF4-8411-0DF6B8E3B878}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B7001720-2731-487C-8AA2-DDEBA626B57C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B7001720-2731-487C-8AA2-DDEBA626B57C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B7001720-2731-487C-8AA2-DDEBA626B57C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B7001720-2731-487C-8AA2-DDEBA626B57C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8A272092-AEF9-423E-80F6-2AF2259E7746}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8A272092-AEF9-423E-80F6-2AF2259E7746}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8A272092-AEF9-423E-80F6-2AF2259E7746}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8A272092-AEF9-423E-80F6-2AF2259E7746}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -45,6 +65,9 @@ Global
 		{FC3F6271-C765-48B6-8030-47868DAA6E6A} = {CB27A19F-5890-4149-B95E-AD4368F95A45}
 		{C98886F1-3F85-46FC-A5E2-37929C923FD7} = {4914B0A5-EAD1-4BC6-8B1A-762F5C9CF99E}
 		{45E6375F-457A-4707-8E15-9BC88517E69B} = {CB27A19F-5890-4149-B95E-AD4368F95A45}
+		{FA5585E7-35BD-4BF4-8411-0DF6B8E3B878} = {7360EE56-E559-44F4-A213-64284EB1667D}
+		{B7001720-2731-487C-8AA2-DDEBA626B57C} = {7360EE56-E559-44F4-A213-64284EB1667D}
+		{8A272092-AEF9-423E-80F6-2AF2259E7746} = {7360EE56-E559-44F4-A213-64284EB1667D}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {B1C3663B-99E1-4586-A5C7-3E11471249A6}

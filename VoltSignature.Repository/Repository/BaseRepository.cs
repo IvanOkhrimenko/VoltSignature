@@ -54,5 +54,11 @@ namespace VoltSignature.Repository.Repository
             source.Add(entity);
             await _context.SaveChangesAsync();
         }
+
+
+        public virtual Type GetEntityType()
+        {
+            return typeof(BaseRepository);
+        }
     }
 }
