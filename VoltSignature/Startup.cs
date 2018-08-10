@@ -8,7 +8,9 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.SpaServices.Webpack;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection; 
+using VoltSignature.MongoDb.Context;
+using VoltSignature.MongoDb.Extension;
 using VoltSignature.PostgreSQL.Context;
 using VoltSignature.Repository.Interface;
 using VoltSignature.Repository.Storage;
@@ -29,12 +31,13 @@ namespace VoltSignature
         {
             string PostgresConnectionString = "Host=localhost;Port=5432;Database=SignatureDb;Username=postgres;Password=fsgpsa";
             //string MSSQLconnectionString = "Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=VoltSignatureDb;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False";
-           
+            string mongoDbConnectionString = "mongodb://localhost:27017/SignatureDb";
 
             services.AddDbContext<DbSignatureContext>(options => options
                                                                 .UseNpgsql(PostgresConnectionString, b => b.MigrationsAssembly("VoltSignature"))
                                                                 //.UseSqlServer(MSSQLconnectionString, b => b.MigrationsAssembly("VoltSignature"))
-                                                                ); 
+                                                                );
+            services.AddMongoContext(mongoDbConnectionString);
 
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
                      .AddCookie(options =>
@@ -86,8 +89,9 @@ namespace VoltSignature
         }
 
         public void AddServices(IServiceCollection services)
-        {
+        {  
             services.AddTransient<IStorage, Storage>();
+ 
         }
     }
 }

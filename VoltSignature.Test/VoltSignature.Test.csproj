@@ -15,6 +15,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\VoltSignature.MongoDb\VoltSignature.MongoDb.csproj" />
     <ProjectReference Include="..\VoltSignature.PostgreSQL\VoltSignature.PostgreSQL.csproj" />
     <ProjectReference Include="..\VoltSignature.Repository\VoltSignature.Repository.csproj" />
   </ItemGroup>
