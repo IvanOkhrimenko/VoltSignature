@@ -1,6 +1,14 @@
-
-<noscript>
-    You need to enable JavaScript to run this app.
-</noscript>
-<div id="root"></div>
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+<div id="react-app" asp-prerender-module="ClientApp/dist/boot-server">Loading...</div>
  
+
+@section scripts {
+    <environment names="Development">
+        <script src="~/dist/main.js" asp-append-version="true"></script>
+    </environment>
+    <environment names="Staging,Production">
+        <script src="~/dist/main.min.js" asp-append-version="true"></script>
+    </environment>
+}

@@ -3,8 +3,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.27703.2035
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VoltSignature", "VoltSignature\VoltSignature.csproj", "{76115149-EA8C-4BEA-8059-CA00E01B9AA6}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Database", "Database", "{CB27A19F-5890-4149-B95E-AD4368F95A45}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VoltSignature.PostgreSQL", "VoltSignature.PostgreSQL\VoltSignature.PostgreSQL.csproj", "{FC3F6271-C765-48B6-8030-47868DAA6E6A}"
@@ -23,7 +21,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VoltSignature.Core", "VoltS
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VoltSignature.Model", "VoltSignature.Model\VoltSignature.Model.csproj", "{8A272092-AEF9-423E-80F6-2AF2259E7746}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VoltSignature.MongoDb", "VoltSignature.MongoDb\VoltSignature.MongoDb.csproj", "{855CC29D-58EE-43D4-8BB9-91C073C72791}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VoltSignature.MongoDb", "VoltSignature.MongoDb\VoltSignature.MongoDb.csproj", "{855CC29D-58EE-43D4-8BB9-91C073C72791}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VoltSignature.UI", "VoltSignature\VoltSignature.UI.csproj", "{3176808C-E13D-4F41-ACDA-D516BC6B9CD9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -31,10 +31,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{76115149-EA8C-4BEA-8059-CA00E01B9AA6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{76115149-EA8C-4BEA-8059-CA00E01B9AA6}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{76115149-EA8C-4BEA-8059-CA00E01B9AA6}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{76115149-EA8C-4BEA-8059-CA00E01B9AA6}.Release|Any CPU.Build.0 = Release|Any CPU
 		{FC3F6271-C765-48B6-8030-47868DAA6E6A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{FC3F6271-C765-48B6-8030-47868DAA6E6A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FC3F6271-C765-48B6-8030-47868DAA6E6A}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -63,6 +59,10 @@ Global
 		{855CC29D-58EE-43D4-8BB9-91C073C72791}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{855CC29D-58EE-43D4-8BB9-91C073C72791}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{855CC29D-58EE-43D4-8BB9-91C073C72791}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3176808C-E13D-4F41-ACDA-D516BC6B9CD9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3176808C-E13D-4F41-ACDA-D516BC6B9CD9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3176808C-E13D-4F41-ACDA-D516BC6B9CD9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3176808C-E13D-4F41-ACDA-D516BC6B9CD9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

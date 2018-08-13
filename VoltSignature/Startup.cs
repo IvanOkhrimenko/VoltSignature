@@ -1,24 +1,28 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.SpaServices.Webpack;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection; 
-using VoltSignature.MongoDb.Context;
-using VoltSignature.MongoDb.Extension;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
+using Newtonsoft.Json.Serialization;
+using System.IO;
+using Microsoft.AspNetCore.SpaServices.Webpack;
 using VoltSignature.PostgreSQL.Context;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using VoltSignature.Repository.Interface;
 using VoltSignature.Repository.Storage;
+using VoltSignature.MongoDb.Extension;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Http;
 
-namespace VoltSignature
+namespace VoltSignature.UI
 {
-    public class Startup
-    {
+	public class Startup
+	{
+
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -26,7 +30,6 @@ namespace VoltSignature
 
         public IConfiguration Configuration { get; }
 
-        // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
             string PostgresConnectionString = "Host=localhost;Port=5432;Database=SignatureDb;Username=postgres;Password=fsgpsa";
@@ -34,64 +37,74 @@ namespace VoltSignature
             string mongoDbConnectionString = "mongodb://localhost:27017/SignatureDb";
 
             services.AddDbContext<DbSignatureContext>(options => options
-                                                                .UseNpgsql(PostgresConnectionString, b => b.MigrationsAssembly("VoltSignature"))
+                                                                .UseNpgsql(PostgresConnectionString, b => b.MigrationsAssembly("VoltSignature.PostgreSQL"))
                                                                 //.UseSqlServer(MSSQLconnectionString, b => b.MigrationsAssembly("VoltSignature"))
                                                                 );
             services.AddMongoContext(mongoDbConnectionString);
 
-            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme) 
                      .AddCookie(options =>
                      {
-                         options.LoginPath = new Microsoft.AspNetCore.Http.PathString("/Account/Login");
+                         options.LoginPath = new PathString("/Account/Login");
+                         options.Events.OnRedirectToLogin = context =>
+                         {
+                             if (context.Request.Path.Value.StartsWith("/api"))
+                             {
+                                 context.Response.Clear();
+                                 context.Response.StatusCode = 401;
+                                 return Task.FromResult(0);
+                             }
+                             context.Response.Redirect(context.RedirectUri);
+                             return Task.FromResult(0);
+                         };
                      });
 
-            AddServices(services);
 
-            services.AddMvc(); 
+            services.AddAuthorization();
+            AddServices(services);
+            services.AddMvc();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
-        {
-            if (env.IsDevelopment())
-            {
-                app.UseDeveloperExceptionPage();
-                //app.UseWebpackDevMiddleware(new WebpackDevMiddlewareOptions
-                //{
-                //    HotModuleReplacement = true,
-                //    ReactHotModuleReplacement = true
-                //});
-            }
-            else
-            {
-                app.UseExceptionHandler("/Home/Error");
-            }
-             
-             
-            app.UseStaticFiles();
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
+		{
+			app.UseDeveloperExceptionPage();
+			if (env.IsDevelopment())
+			{
+				app.UseWebpackDevMiddleware(new WebpackDevMiddlewareOptions {
+					HotModuleReplacement = true,
+					ReactHotModuleReplacement = true,
+                    HotModuleReplacementEndpoint = "/dist/__webpack_hmr"
+                });
+			}
 
             app.UseAuthentication();
-
-            app.UseMvc(routes =>
-            {
-                routes.MapRoute(
-                    name: "Login",
-                    template: "{controller=Account}/{action=Login}/{id?}");
+            app.UseStaticFiles();
+			loggerFactory.AddConsole();
+			app.UseMvc(routes =>
+			{
 
                 routes.MapRoute(
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
 
+
+                routes.MapRoute(
+                    name: "Login",
+                    template: "{controller}/{action}/{id?}");
+
+
                 routes.MapSpaFallbackRoute(
                     name: "spa-fallback",
                     defaults: new { controller = "Home", action = "Index" });
             });
-        }
+		}
 
         public void AddServices(IServiceCollection services)
-        {  
+        {
             services.AddTransient<IStorage, Storage>();
- 
+
         }
+
     }
 }

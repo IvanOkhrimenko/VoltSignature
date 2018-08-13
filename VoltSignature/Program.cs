@@ -1,3 +1,4 @@
+﻿
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -8,7 +9,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 
-namespace VoltSignature
+namespace VoltSignature.UI
 {
     public class Program
     {
