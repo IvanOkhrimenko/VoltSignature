@@ -1,44 +1,40 @@
-import React, {Component} from 'react';
-import { Link } from 'react-router';
+import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
+import { Glyphicon, Nav, Navbar, NavItem } from 'react-bootstrap';
+import { LinkContainer } from 'react-router-bootstrap';
+import '../css/navMenu.css';
 
 class NavMenu extends Component {
   render() {
     return (
-      <div className='main-nav'>
-        <div className='navbar navbar-inverse'>
-          <div className='navbar-header'>
-            <button type='button' className='navbar-toggle' data-toggle='collapse' data-target='.navbar-collapse'>
-              <span className='sr-only'>Toggle navigation</span>
-              <span className='icon-bar'></span>
-              <span className='icon-bar'></span>
-              <span className='icon-bar'></span>
-            </button>
-            <Link className='navbar-brand' to={ '/' }>WebApplicationBasic</Link>
-          </div>
-          <div className='clearfix'></div>
-          <div className='navbar-collapse collapse'>
-            <ul className='nav navbar-nav'>
-              <li>
-                <Link to={ '/' } activeClassName='active'>
-                  <span className='glyphicon glyphicon-home'></span> Home
-                </Link>
-              </li>
-              <li>
-                <Link to={ '/counter' } activeClassName='active'>
-                  <span className='glyphicon glyphicon-education'></span> Counter
-                </Link>
-              </li>
-              <li>
-                <Link to={ '/fetchdata' } activeClassName='active'>
-                  <span className='glyphicon glyphicon-th-list'></span> Fetch data
-                </Link>
-              </li>
-            </ul>
-          </div>
-        </div>
-      </div>
+      <Navbar inverse fixedTop fluid collapseOnSelect>
+        <Navbar.Header>
+          <Navbar.Brand>
+            <Link to={'/'}>WebApplication4</Link>
+          </Navbar.Brand>
+          <Navbar.Toggle />
+        </Navbar.Header>
+        <Navbar.Collapse>
+          <Nav>
+            <LinkContainer to={'/'} exact>
+              <NavItem>
+                <Glyphicon glyph='home' /> Home
+              </NavItem>
+            </LinkContainer>
+            <LinkContainer to={'/counter'}>
+              <NavItem>
+                <Glyphicon glyph='education' /> Counter
+              </NavItem>
+            </LinkContainer>
+            <LinkContainer to={'/fetchdata'}>
+              <NavItem>
+                <Glyphicon glyph='th-list' /> Fetch data
+            </NavItem>
+            </LinkContainer>
+          </Nav>
+        </Navbar.Collapse>
+      </Navbar>
     );
   }
 }
-
 export default NavMenu;

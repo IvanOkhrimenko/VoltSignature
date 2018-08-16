@@ -1,18 +1,19 @@
-import React, {Component, PropTypes} from 'react';
+import React, { Component } from 'react';
+import { PropTypes } from 'prop-types';
 import { connect } from 'react-redux';
-import { Link } from 'react-router';
+import { Link } from 'react-router-dom';
 import { requestWeatherForecasts } from '../reducers/weatherForecasts'
 
 class FetchData extends Component {
   componentWillMount() {
     // This method runs when the component is first added to the page
-    let startDateIndex = parseInt(this.props.params.startDateIndex) || 0;
+    let startDateIndex = parseInt(this.props.match.params.startDateIndex) || 0;
     this.props.requestWeatherForecasts(startDateIndex);
   }
 
   componentWillReceiveProps(nextProps) {
     // This method runs when incoming props (e.g., route params) change
-    let startDateIndex = parseInt(nextProps.params.startDateIndex) || 0;
+    let startDateIndex = parseInt(nextProps.match.params.startDateIndex) || 0;
     this.props.requestWeatherForecasts(startDateIndex);
   }
 
@@ -43,9 +44,9 @@ class FetchData extends Component {
     let prevStartDateIndex = this.props.startDateIndex - 5;
     let nextStartDateIndex = this.props.startDateIndex + 5;
     const pagination = (
-      <p className='clearfix text-center'>
-        <Link className='btn btn-default pull-left' to={ `/fetchdata/${ prevStartDateIndex }` }>Previous</Link>
-        <Link className='btn btn-default pull-right' to={ `/fetchdata/${ nextStartDateIndex }` }>Next</Link>
+      <p className='clearfix text-center'> 
+        <Link className='btn btn-default pull-left' to={`/fetchdata/${prevStartDateIndex}`}>Previous</Link>
+        <Link className='btn btn-default pull-right' to={`/fetchdata/${nextStartDateIndex}`}>Next</Link>
         { this.props.isLoading ? <span>Loading...</span> : [] }
       </p>
     );
@@ -61,11 +62,7 @@ class FetchData extends Component {
   }
 }
 
-FetchData.propTypes = {
-  startDateIndex: PropTypes.number,
-  isLoading: PropTypes.bool,
-  requestWeatherForecasts: PropTypes.func.isRequired
-};
+ 
 
 const mapStateToProps = (state) => ({
   startDateIndex: state.weatherForecasts.startDateIndex,
