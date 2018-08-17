@@ -5,12 +5,15 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Mapper\" />
+    <PackageReference Include="AutoMapper" Version="7.0.1" />
+    <PackageReference Include="Microsoft.AspNetCore.All" Version="2.1.2" />
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="AutoMapper" Version="7.0.1" />
-    <PackageReference Include="Microsoft.AspNetCore.All" Version="2.1.2" />
+    <ProjectReference Include="..\VoltSignature.Interface\VoltSignature.Interface.csproj" />
+    <ProjectReference Include="..\VoltSignature.Model\VoltSignature.Model.csproj" />
+    <ProjectReference Include="..\VoltSignature.PostgreSQL\VoltSignature.PostgreSQL.csproj" />
+    <ProjectReference Include="..\VoltSignature.Repository\VoltSignature.Repository.csproj" />
   </ItemGroup>
 
 </Project>

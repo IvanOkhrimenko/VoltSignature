@@ -17,6 +17,10 @@ using VoltSignature.Repository.Storage;
 using VoltSignature.MongoDb.Extension;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Http;
+using AutoMapper;
+using VoltSignature.Core.Mapper;
+using VoltSignature.Interface;
+using VoltSignature.Core.Services;
 
 namespace VoltSignature.UI
 {
@@ -102,8 +106,10 @@ namespace VoltSignature.UI
 
         public void AddServices(IServiceCollection services)
         {
-            services.AddTransient<IStorage, Storage>();
-
+            services.AddTransient<IStorage, Storage>(); 
+            services.AddSingleton(new MapperConfiguration(cfg => cfg.AddProfile(new MappingProfile())).CreateMapper());
+            services.AddTransient<IUserService, UserService>();
+            services.AddTransient<ICompanyService, CompanyService>();
         }
 
     }
