@@ -4,3 +4,25 @@
     padding-top: 50px;
   }
 }
+
+/* main site color green = #28a745*/
+
+.custom-header {
+  background-color: #222;
+  color: #333;
+  height: 51px;
+}
+
+.header-item{
+  padding:1em;
+  float:right;
+
+}
+.navbar,
+.navbar-default {
+  background-image: none !important; 
+}
+.header-item a {
+  color: #9d9d9d;
+  margin-right: 1em;
+}

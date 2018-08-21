@@ -5,9 +5,9 @@ import { LinkContainer } from 'react-router-bootstrap';
 import '../css/navMenu.css';
 
 class NavMenu extends Component {
-  render() {
+  render() { 
     return (
-      <Navbar inverse fixedTop fluid collapseOnSelect>
+      <Navbar inverse fixedTop fluid collapseOnSelect >
         <Navbar.Header>
           <Navbar.Brand>
             <Link to={'/'}>WebApplication4</Link>
