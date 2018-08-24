@@ -1,12 +1,17 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using System;
 using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authentication.Cookies; 
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
+using VoltSignature.Interface;
 using VoltSignature.Model.Account;
 using VoltSignature.PostgreSQL.Entity;
 using VoltSignature.Repository.Interface;
@@ -16,23 +21,31 @@ namespace VoltSignature.UI.Controllers
 {
     public class AccountController : Controller
     {
-        IStorage _storage;
+        private IStorage _storage;
+        private readonly IUserService _userService;
 
-        public AccountController(IStorage storage)
+        public AccountController(IStorage storage, IUserService userService)
         {
             _storage = storage;
+            _userService = userService;
         }
 
         [HttpGet]
         public IActionResult Login() => View();
 
+        [HttpGet("/Account/Register/{token}")]
+        public IActionResult Register(string token)
+        {
+            ViewBag.token = token;
+            return View();
+        }
 
         [HttpPost]
         public async Task<IActionResult> Login(LoginModel model)
         {
             if (!ModelState.IsValid)
                 return View(model);
-            User user = await _storage.Get<User>().Get(x => x.Email == model.Login && x.Password == model.Password, query=> query.Include(x=>x.UserRole), true);
+            User user = await _storage.Get<User>().Get(x => x.Email == model.Login && x.Password == model.Password, query => query.Include(x => x.UserRole), true);
             if (user == null)
                 return View(model);
             await Authenticate(user);
@@ -45,26 +58,39 @@ namespace VoltSignature.UI.Controllers
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
             return RedirectToAction("Login", "Account");
         }
-
-        [HttpGet]
-        public async Task<IActionResult> Register()
-        {
-            return View();
-        }
+         
 
         [HttpPost]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public async Task<IActionResult> Register(RegisterModel model)
         {
             if (ModelState.IsValid)
             {
-
+                User user  = await _userService.RegisterUser(model, RegisterParameters);
+                await Authenticate(user);
+                return RedirectToAction("Index", "Home");
             }
             return View(model);
         }
 
 
+        [HttpGet]
+        [Authorize(AuthenticationSchemes = CookieAuthenticationDefaults.AuthenticationScheme)]
+        public  IActionResult GetRegisterToken()
+        {
+            RegistrationParameters parameters = new RegistrationParameters()
+            {
+                CompanyId = 1,
+                Position = "Sales",
+                RoleId = 1
+            };
+
+            string token = _userService.GenerateRegistrationToken(parameters);
+            return Json(new { token = token });
+        }
+
         private async Task Authenticate(User user)
-        { 
+        {
             var claims = new[]
             {
                 new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
@@ -79,6 +105,19 @@ namespace VoltSignature.UI.Controllers
             };
             ClaimsIdentity id = new ClaimsIdentity(claims, "ApplicationCookie", ClaimsIdentity.DefaultNameClaimType, ClaimsIdentity.DefaultRoleClaimType);
             await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(id));
+        }
+        
+        private RegistrationParameters RegisterParameters
+        {
+            get
+            {
+                return new RegistrationParameters
+                {
+                    Position = User.Claims.FirstOrDefault(x => x.Type == RegistrationParameters.PositionClaim)?.Value,
+                    CompanyId = int.Parse(User.Claims.FirstOrDefault(x => x.Type == RegistrationParameters.CompanyClaim)?.Value),
+                    RoleId = int.Parse(User.Claims.FirstOrDefault(x => x.Type == RegistrationParameters.RoleClaim)?.Value)
+                };
+            }
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Http;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Text;
@@ -19,5 +20,8 @@ namespace VoltSignature.Model.Account
         [Required]
         [DataType(DataType.Password)]
         public string Password { get; set; }
+
+ 
+        public IFormFile Image { get; set; }
     }
 }

@@ -1,6 +1,6 @@
 ﻿@model RegisterModel
 @{
-    ViewData["Title"] = "Registration";
+    ViewData["Title"] = "Registration"; 
 }
 
 <div class="container">
@@ -13,10 +13,11 @@
 
             <p class="lead">ABC motors share you invite to service</p>
 
-            <form id="contact-form" asp-controller="Account" asp-action="Register" method="post" role="form">
+            <form id="contact-form" action="/Account/Register" method="post" enctype="multipart/form-data" role="form">
 
                 <div class="messages"></div>
-
+            
+                 
                 <div class="controls">
 
                     <div class="row">
@@ -72,13 +73,23 @@
 
                     <div class="row">
 
-                        <div class="col-md-12">
+
+
+                        <div class="col-md-6">
                             <div class="form-group">
                                 <!-- Replace data-sitekey with your own one, generated at https://www.google.com/recaptcha/admin -->
                                 <div class="g-recaptcha" data-sitekey="6LfKURIUAAAAAO50vlwWZkyK_G2ywqE52NU7YO0S" data-callback="recaptchaCallback"></div>
                             </div>
                         </div>
 
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="Image">Avatar</label>
+                                <input asp-for="Image" type="file" name="Image" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
                         <div class="col-md-12">
                             <input type="submit" disabled class="btn disabled btn-success btn-send" value="Registration">
                         </div>
@@ -99,9 +110,31 @@
 <script type="text/javascript">
     function recaptchaCallback() {
         $('input[type=submit]').removeAttr('disabled');
-    }
-
+    } 
     $(function () {
-        $('#contact-form').validator();
+        $('#contact-form')[0].action += '?token=' + "@ViewBag.token"; 
+        $('#contact-form').validator(); 
+        //$("#contact-form").submit(function (event) { 
+        //    event.preventDefault();
+        //    var token = $('#token').val();
+        //    var formData = new FormData(this); 
+        //    $.ajax({
+        //        type: "POST",
+        //        url: "/Register",
+        //        cache: false,
+        //        contentType: false,
+        //        processData: false,
+        //        data: formData,
+        //        headers: {
+        //             "Authorization": "Bearer " + token
+        //        },
+        //        success: function (e) {
+                     
+        //        },
+        //        error: function (e) {
+                     
+        //        }
+        //    });
+        //});
     });
 </script>

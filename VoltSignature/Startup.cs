@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -10,11 +11,14 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Microsoft.Extensions.Primitives;
+using Microsoft.IdentityModel.Tokens;
 using System.Threading.Tasks;
 using VoltSignature.Core.Logger;
 using VoltSignature.Core.Mapper;
 using VoltSignature.Core.Services;
 using VoltSignature.Interface;
+using VoltSignature.Model.Account;
 using VoltSignature.Model.Settings;
 using VoltSignature.MongoDb.Extension;
 using VoltSignature.PostgreSQL.Context;
@@ -57,6 +61,28 @@ namespace VoltSignature.UI
                              }
                              context.Response.Redirect(context.RedirectUri);
                              return Task.FromResult(0);
+                         };
+                     })
+                     .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, options =>
+                     {
+                         options.Events = new JwtBearerEvents
+                         {
+                             OnMessageReceived = context =>
+                             {
+                                 if (context.Request.Path.Value.StartsWith("/Account/Register") && context.Request.Query.TryGetValue("token", out StringValues token))
+                                     context.Token = token;
+                                 return Task.CompletedTask;
+                             }
+                         };
+                         options.TokenValidationParameters = new TokenValidationParameters
+                         { 
+                             ValidateIssuer = true, 
+                             ValidIssuer = RegisterTokenOptions.ISSUER, 
+                             ValidateAudience = true, 
+                             ValidAudience = RegisterTokenOptions.AUDIENCE, 
+                             ValidateLifetime = true, 
+                             IssuerSigningKey = RegisterTokenOptions.GetSymmetricSecurityKey(), 
+                             ValidateIssuerSigningKey = true,
                          };
                      });
 

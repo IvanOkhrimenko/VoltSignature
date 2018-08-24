@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.1</TargetFramework>
@@ -10,6 +10,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\VoltSignature.Model\VoltSignature.Model.csproj" />
+    <ProjectReference Include="..\VoltSignature.PostgreSQL\VoltSignature.PostgreSQL.csproj" /> 
   </ItemGroup>
 
 </Project>
