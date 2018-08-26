@@ -1,12 +1,10 @@
 ﻿using AutoMapper;
 using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
+using VoltSignature.DbCore.Entity;
+using VoltSignature.DbCore.Repository;
 using VoltSignature.Interface;
 using VoltSignature.Model.Company;
-using VoltSignature.PostgreSQL.Entity;
-using VoltSignature.Repository.Interface;
 
 namespace VoltSignature.Core.Services
 {
@@ -20,12 +18,12 @@ namespace VoltSignature.Core.Services
         {
             _mapper = mapper;
             _storage = storage;
-            _companyRepository = _storage.Get<Company>();
+            _companyRepository = _storage.GetRepository<Company>();
         }
 
-        public async Task<CompanyModel> GetCompany(int Id)
+        public async Task<CompanyModel> GetCompany(string Id)
         {
-            var company = await  _companyRepository.Get(x => x.Id == Id, asNoTracking: true);
+            var company = await _companyRepository.Get(x => x.Id == Id);
             if (company == null)
                 throw new Exception("Not found company by id " + Id);
             var result = _mapper.Map<Company, CompanyModel>(company);

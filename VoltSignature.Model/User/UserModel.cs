@@ -6,7 +6,7 @@ namespace VoltSignature.Model.User
 {
     public class UserModel
     {
-        public int Id { get; set; }
+        public string Id { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string FullName => FirstName + " " + LastName;
@@ -15,7 +15,7 @@ namespace VoltSignature.Model.User
         public string Phone { get; set; }
         public string Position { get; set; }  
         public string ImageId { get; set; }
-        public int CompanyId { get; set; }
+        public string CompanyId { get; set; }
         public string Role { get; set; }
     }
 }

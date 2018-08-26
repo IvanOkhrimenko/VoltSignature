@@ -14,16 +14,10 @@ using Microsoft.Extensions.Options;
 using Microsoft.Extensions.Primitives;
 using Microsoft.IdentityModel.Tokens;
 using System.Threading.Tasks;
-using VoltSignature.Core.Logger;
-using VoltSignature.Core.Mapper;
-using VoltSignature.Core.Services;
-using VoltSignature.Interface;
+using VoltSignature.Common.Logger;
+using VoltSignature.Core.Extensions;
 using VoltSignature.Model.Account;
-using VoltSignature.Model.Settings;
-using VoltSignature.MongoDb.Extension;
-using VoltSignature.PostgreSQL.Context;
-using VoltSignature.Repository.Interface;
-using VoltSignature.Repository.Storage;
+using VoltSignature.Model.Settings; 
 using VoltSignature.UI.Middleware;
 
 namespace VoltSignature.UI
@@ -41,11 +35,8 @@ namespace VoltSignature.UI
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<DbSignatureContext>(options => options
-                                                                .UseNpgsql(Configuration.GetConnectionString("Postgres"), b => b.MigrationsAssembly("VoltSignature.PostgreSQL"))
-                                                                //.UseSqlServer(Configuration.GetConnectionString("MSSQL"), b => b.MigrationsAssembly("VoltSignature"))
-                                                                );
-            services.AddMongoContext(Configuration.GetConnectionString("Mongo"));
+            string connectionString = Configuration.GetConnectionString("Mongo");
+            services.AddMongoContext(connectionString);
 
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
                      .AddCookie(options =>
@@ -87,7 +78,9 @@ namespace VoltSignature.UI
                      });
 
             services.AddAuthorization();
-            AddServices(services);
+            services.Configure<LoggerSetting>(_loggerConfig);
+            services.AddMapper();
+            services.RegisterServices(Configuration);
             services.AddMvc();
         }
 
@@ -109,7 +102,7 @@ namespace VoltSignature.UI
             app.UseStaticFiles();
             loggerFactory.AddConsole().AddDebug().AddProvider(new LoggerProvider(_loggerConfig, env.EnvironmentName));
 
-            app.UseMiddleware<ErrorHadnlerMiddleware>();
+            app.UseMiddleware<ErrorHandlerMiddleware>();
             app.UseMvc(routes =>
             {
                 routes.MapRoute(
@@ -126,15 +119,7 @@ namespace VoltSignature.UI
             });
         }
 
-        public void AddServices(IServiceCollection services)
-        {
-            services.Configure<LoggerSetting>(_loggerConfig);
-
-            services.AddTransient<IStorage, Storage>();
-            services.AddSingleton(new MapperConfiguration(cfg => cfg.AddProfile(new MappingProfile())).CreateMapper());
-            services.AddTransient<IUserService, UserService>();
-            services.AddTransient<ICompanyService, CompanyService>();
-        }
+  
 
         public static void Main(string[] args) =>
             WebHost.CreateDefaultBuilder(args)

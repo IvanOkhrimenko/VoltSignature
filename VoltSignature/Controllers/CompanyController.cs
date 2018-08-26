@@ -20,7 +20,7 @@ namespace VoltSignature.UI.Controllers
         }
 
         [HttpGet("{Id?}")]
-        public async Task<CompanyModel> Get(int? Id)
+        public async Task<CompanyModel> Get(string Id)
         {
             var company = await _companyService.GetCompany(Id ?? CurrentUser.CompanyId);
             return company;
