@@ -1,0 +1,137 @@
+﻿
+@{
+    ViewData["Title"] = "LoadCertificate";
+}
+
+<h2 style="text-align:center">Load or create Certificate</h2>
+
+<div class="container">
+    <div class="container">
+        <input class="control" onchange="SwapBuildOption(this.checked)" type="checkbox" /> Create new certificate<br />
+    </div>
+    <div id="inputFileControl" style="border:1px solid black;" class="panel panel-default">
+        <div class="panel-heading"><strong>Upload File</strong></div>
+        <div class="panel-body">
+            <!-- Standar Form -->
+            <h4>Select certificate file from your computer</h4>
+            <form action="" method="post" enctype="multipart/form-data" id="js-upload-form">
+                <div class="form-inline">
+                    <div class="form-group">
+                        <input type="file" name="file" onchange="loadFromInput(this.files)" id="js-upload-files">
+                    </div>
+
+                </div>
+            </form>
+            <!-- Drop Zone -->
+            <h4>Or drag and drop file below</h4>
+            <button onclick="RemoveFile()" style="float:right" class="btn btn-danger">X</button>
+            <div class="upload-drop-zone" id="drop-zone">
+                Just drag and drop file here
+            </div>
+            <button type="submit" style="float:right" class="btn btn-sm btn-success" id="js-upload-submit">OK</button>
+        </div>
+    </div>
+    <button style="float:right" onclick="next()" class="btn btn-primary">Next</button>
+</div> <!-- /container -->
+
+<style>
+    .upload-drop-zone {
+        height: 200px;
+        border-width: 2px;
+        margin-bottom: 20px;
+    }
+
+    /* skin.css Style*/
+    .upload-drop-zone {
+        color: #ccc;
+        border-style: dashed;
+        border-color: #ccc;
+        line-height: 200px;
+        text-align: center
+    }
+
+        .upload-drop-zone.drop {
+            color: #222;
+            border-color: #222;
+        }
+</style>
+
+<link href="//netdna.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+
+
+<script src="https://ajax.aspnetcdn.com/ajax/jquery/jquery-2.2.0.min.js"
+        asp-fallback-src="~/lib/jquery/dist/jquery.min.js"
+        asp-fallback-test="window.jQuery">
+</script>
+
+
+
+<script>
+    var CertificateFile;
+    var dropZone = document.getElementById('drop-zone');
+    var uploadForm = document.getElementById('js-upload-form');
+
+    function next() {
+
+    }
+
+    function SwapBuildOption(val) {
+        if (val) {
+            $('#inputFileControl').css('opacity', 0.3);
+            $('#inputFileControl button').prop('disabled', true);
+        }
+        else {
+            $('#inputFileControl').css('opacity', 1);
+            $('#inputFileControl button').prop('disabled', false);     
+        }
+    }
+
+    function RemoveFile() {
+        CertificateFile = null;
+        dropZone.innerHTML = ' Just drag and drop file here '
+    }
+
+    function loadFromInput(files) {
+        CertificateFile = files[0];
+        if (CertificateFile)
+            dropZone.innerHTML = '<b style="color:black">' + CertificateFile.name + '</b>'
+    }
+
+    + function ($) {
+
+        var token='@ViewBag.token'
+
+        var startUpload = function (files) {
+            console.log(files)
+        }
+
+
+
+        uploadForm.addEventListener('submit', function (e) {
+            var uploadFiles = document.getElementById('js-upload-files').files;
+            e.preventDefault()
+            console.log('test');
+            startUpload(uploadFiles)
+        })
+
+        dropZone.ondrop = function (e) {
+            e.preventDefault();
+            this.className = 'upload-drop-zone';
+            this.innerHTML = '<b style="color:black">' + e.dataTransfer.files[0].name + '</b>'
+            CertificateFile = e.dataTransfer.files[0];
+            startUpload(e.dataTransfer.files)
+        }
+
+        dropZone.ondragover = function () {
+            this.className = 'upload-drop-zone drop';
+            return false;
+        }
+
+        dropZone.ondragleave = function () {
+            this.className = 'upload-drop-zone';
+            return false;
+        }
+
+    }(jQuery);
+</script>
+

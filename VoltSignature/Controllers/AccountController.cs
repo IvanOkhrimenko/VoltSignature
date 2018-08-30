@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Primitives;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
@@ -26,13 +27,23 @@ namespace VoltSignature.UI.Controllers
         [HttpGet]
         public IActionResult Login() => View();
 
-        [HttpGet("/Account/Register/{token}")]
+        [HttpGet("/Account/Register")]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-        public IActionResult Register(string token)
-        {
-            ViewBag.token = token;
+        public IActionResult Register()
+        { 
+            ViewBag.token = Request.Query["token"];
             return View();
         }
+
+
+        [HttpGet("/Account/Certificate")]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        public IActionResult LoadCertificate()
+        {
+            ViewBag.token = Request.Query["token"];
+            return View();
+        }
+         
 
         [HttpPost]
         public async Task<IActionResult> Login(LoginModel model)
@@ -60,8 +71,8 @@ namespace VoltSignature.UI.Controllers
             if (ModelState.IsValid)
             {
                 UserModel user = await _userService.RegisterUser(model, RegisterParameters);
-                await Authenticate(user);
-                return RedirectToAction("Index", "Home");
+                await Authenticate(user); 
+                return RedirectToAction("Certificate", "Account",new { token = Request.Query["token"] });
             }
             return View(model);
         }
@@ -70,13 +81,12 @@ namespace VoltSignature.UI.Controllers
         [Authorize(AuthenticationSchemes = CookieAuthenticationDefaults.AuthenticationScheme, Roles = "CompanyAdmin,Admin")]
         public IActionResult GetRegisterToken(RegistrationParameters parameters)
         {
-            //RegistrationParameters parameters = new RegistrationParameters()
+            //RegistrationParameters parameter = new RegistrationParameters()
             //{
             //    CompanyId = "someId",
             //    Position = "Sales",
             //    Role = "User"
-            //};
-
+            //}; 
             string token = _userService.GenerateRegistrationToken(parameters);
             return Json(new { token = token });
         }

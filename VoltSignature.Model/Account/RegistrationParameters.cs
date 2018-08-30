@@ -13,6 +13,6 @@ namespace VoltSignature.Model.Account
 
         public const string PositionClaim = "position";
         public const string CompanyClaim = "company";
-        public const string RoleClaim = "role";
+        public const string RoleClaim = "roleType";
     }
 }

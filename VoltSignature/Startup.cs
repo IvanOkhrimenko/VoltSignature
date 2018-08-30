@@ -60,8 +60,8 @@ namespace VoltSignature.UI
                          {
                              OnMessageReceived = context =>
                              {
-                                 if (context.Request.Path.Value.StartsWith("/Account/Register") && context.Request.Query.TryGetValue("token", out StringValues token))
-                                     context.Token = token;
+                                 if (context.Request.Path.Value.StartsWith("/Account/Register") || context.Request.Path.Value.StartsWith("/Account/Certificate")) 
+                                     context.Token = context.Request.Query["token"]; 
                                  return Task.CompletedTask;
                              }
                          };
