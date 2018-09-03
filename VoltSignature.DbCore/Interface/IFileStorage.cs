@@ -11,5 +11,6 @@ namespace VoltSignature.DbCore.Interface
         Task<byte[]> Get(string id);
         Task Remove(string id);
         Task<string> Save(Stream imageStream, string imageName);
+        Task<string> Save(byte[] image, string imageName);
     }
 }

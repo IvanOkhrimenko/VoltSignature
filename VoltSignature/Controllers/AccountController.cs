@@ -77,7 +77,7 @@ namespace VoltSignature.UI.Controllers
             return View(model);
         }
 
-        [HttpPost]
+        [HttpGet]
         [Authorize(AuthenticationSchemes = CookieAuthenticationDefaults.AuthenticationScheme, Roles = "CompanyAdmin,Admin")]
         public IActionResult GetRegisterToken(RegistrationParameters parameters)
         {
@@ -86,7 +86,7 @@ namespace VoltSignature.UI.Controllers
             //    CompanyId = "someId",
             //    Position = "Sales",
             //    Role = "User"
-            //}; 
+            //};
             string token = _userService.GenerateRegistrationToken(parameters);
             return Json(new { token = token });
         }

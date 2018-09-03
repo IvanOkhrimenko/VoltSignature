@@ -31,7 +31,9 @@
             <button type="submit" style="float:right" class="btn btn-sm btn-success" id="js-upload-submit">OK</button>
         </div>
     </div>
-    <button style="float:right" onclick="next()" class="btn btn-primary">Next</button>
+    <a id="start"  style="display:none;float:right;margin-left:1em;" href="/" class="btn btn-primary">Start using service</a>
+    <button  style="float:right"  onclick="next()" class="btn btn-primary">Load</button>
+
 </div> <!-- /container -->
 
 <style>
@@ -70,12 +72,21 @@
     var CertificateFile;
     var dropZone = document.getElementById('drop-zone');
     var uploadForm = document.getElementById('js-upload-form');
+    var isCreatenew = false;
 
     function next() {
+        if (isCreatenew) {
+            document.location.href = "/file/generateCertificate" 
+        }
+        else {
 
+        }
+        $('#start').css('display', 'block');
     }
+     
 
     function SwapBuildOption(val) {
+        isCreatenew = val;
         if (val) {
             $('#inputFileControl').css('opacity', 0.3);
             $('#inputFileControl button').prop('disabled', true);

@@ -13,17 +13,20 @@ namespace VoltSignature.Core
         {
             if (keyPair == null)
                 throw new NullReferenceException("Key value pair cannot be null");
-            RsaKeyParameters privatKey = (RsaKeyParameters)keyPair.Private;
-            RsaKeyParameters publicKey = (RsaKeyParameters)keyPair.Public;
+            PrivatKey = (RsaKeyParameters)keyPair.Private;
+            PublicKey = (RsaKeyParameters)keyPair.Public;
         }
 
-        public UserKeyPair(byte[] publicKeyByte, byte[] privatKeyByte = null)
+        public UserKeyPair(RsaKeyParameters publicKey)
         {
-            if (publicKeyByte == null)
-                throw new NullReferenceException("public key value cannot be null");
-            PublicKey = (RsaKeyParameters)PublicKeyFactory.CreateKey(publicKeyByte);
-            if (privatKeyByte != null)
-                PrivatKey = (RsaKeyParameters)PrivateKeyFactory.CreateKey(privatKeyByte);
+            PublicKey = publicKey ?? throw new NullReferenceException("public key value cannot be null");
+        }
+
+        public UserKeyPair(byte[] privatKeyByte)
+        {
+            if (privatKeyByte == null)
+                throw new NullReferenceException("private key value cannot be null"); 
+            PrivatKey = (RsaKeyParameters)PrivateKeyFactory.CreateKey(privatKeyByte);
         }
 
         public RsaKeyParameters PrivatKey { get; }

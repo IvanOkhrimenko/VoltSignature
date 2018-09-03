@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Reflection;
-using System.Text;
 using VoltSignature.DbCore.Context;
 using VoltSignature.DbCore.Entity.Base;
 using VoltSignature.DbCore.Repository;
@@ -11,13 +9,12 @@ namespace VoltSignature.Core.Storage
 {
     public class Storage : IStorage
     {
-        MongoContext _context;
-          
+        private MongoContext _context;
+
         public Storage(MongoContext context)
         {
             _context = context;
         }
-
 
         public IRepository<T> GetRepository<T>() where T : IEntity<string>
         {

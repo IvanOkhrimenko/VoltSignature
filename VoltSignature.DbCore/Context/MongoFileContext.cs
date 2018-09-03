@@ -30,5 +30,15 @@ namespace VoltSignature.DbCore.Context
             ObjectId imageId = await _gridFS.UploadFromStreamAsync(imageName, imageStream);
             return imageId.ToString();
         }
+
+        public async Task<string> Save(byte[] image, string imageName)
+        {
+            using(MemoryStream ms = new MemoryStream(image))
+            {
+                ObjectId imageId = await _gridFS.UploadFromStreamAsync(imageName, ms);
+                return imageId.ToString();
+            }
+
+        }
     }
 }

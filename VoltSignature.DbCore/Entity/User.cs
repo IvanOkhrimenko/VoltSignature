@@ -21,6 +21,7 @@ namespace VoltSignature.DbCore.Entity
         public string PublicKey { get; set; }
         public string ImageId { get; set; }
         public string Role { get; set; }
+        public string CertificateId { get; set; }
 
         public string CompanyId { get; set; } 
 

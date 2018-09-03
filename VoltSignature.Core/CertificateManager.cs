@@ -7,6 +7,7 @@ using Org.BouncyCastle.Math;
 using Org.BouncyCastle.Security;
 using Org.BouncyCastle.X509;
 using System;
+using VoltSignature.Model.Files;
 
 namespace VoltSignature.Core
 {
@@ -48,8 +49,13 @@ namespace VoltSignature.Core
 
         public AsymmetricCipherKeyPair GeneratePair()
         {
+#if DEBUG
+            const int KeyBit = 2048 ;
+#else
+            const int KeyBit = 8192;
+#endif
             RsaKeyPairGenerator generator = new RsaKeyPairGenerator();
-            generator.Init(new KeyGenerationParameters(new SecureRandom(), 8192));
+            generator.Init(new KeyGenerationParameters(new SecureRandom(), KeyBit));
             AsymmetricCipherKeyPair keyPair = generator.GenerateKeyPair();
             return keyPair;
         }
@@ -65,7 +71,7 @@ namespace VoltSignature.Core
             certGenerator.SetSerialNumber(BigInteger.ValueOf(1));
             certGenerator.SetNotAfter(DateTime.UtcNow.AddYears(1));
             certGenerator.SetNotBefore(DateTime.UtcNow);
-            certGenerator.SetPublicKey(subjectPublic);
+            certGenerator.SetPublicKey(subjectPublic); 
             return certGenerator.Generate(signatureFactory);
         }
 
