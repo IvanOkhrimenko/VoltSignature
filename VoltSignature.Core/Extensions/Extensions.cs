@@ -4,7 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 using VoltSignature.Core.Mapper;
 using VoltSignature.Core.Services;
 using VoltSignature.DbCore.Context;
-using VoltSignature.DbCore.Interface;
+using VoltSignature.Files.Interface;
 using VoltSignature.Interface;
 
 namespace VoltSignature.Core.Extensions

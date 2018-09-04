@@ -20,11 +20,18 @@ namespace VoltSignature.UI.Controllers
             _fileService = fileService;
         }
 
-        [HttpGet("/file/generateCertificate")] 
+        [HttpGet("/file/generateCertificate")]
         public async Task<FileResult> GenerateCertificate()
         {
             var file = await _fileService.GeneratePrivateKey(CurrentUser);
             return File(file.Data, "application/octet-stream", file.Name);
+        }
+
+        [HttpGet("/file/image/{id}")]
+        public async Task<FileResult> GetImage(string id)
+        {
+            var image = await _fileService.GetImage(id);
+            return File(image.Data, "image/*", image.Name);
         }
     }
 }

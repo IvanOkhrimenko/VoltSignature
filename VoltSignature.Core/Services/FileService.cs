@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Threading.Tasks;
-using VoltSignature.DbCore.Entity;
-using VoltSignature.DbCore.Interface;
+using VoltSignature.Common.Exceptions;
+using VoltSignature.DbCore.Entity; 
+using VoltSignature.DbCore.Repository;
+using VoltSignature.Files.Interface;
+using VoltSignature.Files.Model;
 using VoltSignature.Interface;
-using VoltSignature.Model.Account;
-using VoltSignature.Model.Files;
+using VoltSignature.Model.Account; 
 using VoltSignature.Model.User;
 
 namespace VoltSignature.Core.Services
@@ -13,12 +15,12 @@ namespace VoltSignature.Core.Services
     {
         private CertificateManager _certificator;
         private IFileStorage _fileContext;
-        private IStorage _storage;
+        private IStorage _storage; 
 
         public FileService(IFileStorage fileContext, IStorage storage)
         {
             _fileContext = fileContext;
-            _storage = storage;
+            _storage = storage; 
             _certificator = new CertificateManager();
         }
 
@@ -31,12 +33,22 @@ namespace VoltSignature.Core.Services
             string name = "certificate_" + user.FullName.Replace(" ", "_");
             user.CertificateId = await _fileContext.Save(_certificator.ConvertToByte(certificate), name);
             await userRepository.Update(user);
-            FileModel file = new FileModel
-            {
-                Data = keypair.PrivatKeyByte,
-                Name = Guid.NewGuid() + ".pkf"
-            };
+            FileModel file = new FileModel(Guid.NewGuid() + ".pkf", keypair.PrivatKeyByte);
             return file;
         }
+
+        public async Task<FileModel> GetImage(string id)
+        {
+            var file = await _fileContext.Get(id);
+            if (file == null)
+                throw new SignatureException($"Not found image with id {id}", System.Net.HttpStatusCode.NotFound);
+            //TO DO:
+            //Add checking file for image
+            return file;  
+        }
+
+
+ 
+ 
     }
 }

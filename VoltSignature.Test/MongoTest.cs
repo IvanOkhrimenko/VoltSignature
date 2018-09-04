@@ -71,6 +71,7 @@ namespace VoltSingature.Test
             context.CreateCollection("Companys").Wait();
             context.CreateCollection("Users").Wait();
             context.CreateCollection("Signatures").Wait();
+            context.CreateCollection("FileInfo").Wait();
 
             Storage storage = new Storage(context);
             var companyRepository = storage.GetRepository<Company>();
@@ -159,8 +160,8 @@ namespace VoltSingature.Test
             }
             Assert.IsNotNull(id);
             var file = context.Get(id).Result;
-            var newBase64 = Convert.ToBase64String(file);
-            Assert.AreEqual(bytes[30], file[30]);
+            var newBase64 = Convert.ToBase64String(file.Data);
+            Assert.AreEqual(bytes[30], file.Data[30]);
 
             context.Remove(id).Wait();
       

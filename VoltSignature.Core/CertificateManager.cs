@@ -6,8 +6,7 @@ using Org.BouncyCastle.Crypto.Operators;
 using Org.BouncyCastle.Math;
 using Org.BouncyCastle.Security;
 using Org.BouncyCastle.X509;
-using System;
-using VoltSignature.Model.Files;
+using System; 
 
 namespace VoltSignature.Core
 {

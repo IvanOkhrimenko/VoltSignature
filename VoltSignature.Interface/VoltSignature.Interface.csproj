@@ -10,6 +10,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\VoltSignature.DbCore\VoltSignature.DbCore.csproj" />
+    <ProjectReference Include="..\VoltSignature.Files\VoltSignature.Files.csproj" />
     <ProjectReference Include="..\VoltSignature.Model\VoltSignature.Model.csproj" /> 
   </ItemGroup>
 
