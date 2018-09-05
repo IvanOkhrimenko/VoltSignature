@@ -13,13 +13,11 @@ namespace VoltSignature.Core.Services
 {
     public class FileService : IFileService
     {
-        private CertificateManager _certificator;
-        private IFileStorage _fileContext;
+        private CertificateManager _certificator; 
         private IStorage _storage; 
 
-        public FileService(IFileStorage fileContext, IStorage storage)
-        {
-            _fileContext = fileContext;
+        public FileService(IStorage storage)
+        { 
             _storage = storage; 
             _certificator = new CertificateManager();
         }
@@ -27,11 +25,12 @@ namespace VoltSignature.Core.Services
         public async Task<FileModel> GeneratePrivateKey(CurrentUser currentUser)
         {
             var userRepository = _storage.GetRepository<User>();
+            var certificateFileRepository = _storage.GetFileRepository(FileTypeEnum.Certificate);
             var keypair = new UserKeyPair(_certificator.GeneratePair());
             var certificate = _certificator.GenerateCertificate(currentUser.FullName, RegisterTokenOptions.ISSUER, keypair.PrivatKey, keypair.PublicKey);
             var user = await userRepository.Get(x => x.Id == currentUser.Id);
             string name = "certificate_" + user.FullName.Replace(" ", "_");
-            user.CertificateId = await _fileContext.Save(_certificator.ConvertToByte(certificate), name);
+            user.CertificateId = await certificateFileRepository.Save(_certificator.ConvertToByte(certificate), name);
             await userRepository.Update(user);
             FileModel file = new FileModel(Guid.NewGuid() + ".pkf", keypair.PrivatKeyByte);
             return file;
@@ -39,11 +38,10 @@ namespace VoltSignature.Core.Services
 
         public async Task<FileModel> GetImage(string id)
         {
-            var file = await _fileContext.Get(id);
+            var imageRepository = _storage.GetFileRepository(FileTypeEnum.Image);
+            var file = await imageRepository.Get(id);
             if (file == null)
-                throw new SignatureException($"Not found image with id {id}", System.Net.HttpStatusCode.NotFound);
-            //TO DO:
-            //Add checking file for image
+                throw new SignatureException($"Not found image with id {id}", System.Net.HttpStatusCode.NotFound); 
             return file;  
         }
 

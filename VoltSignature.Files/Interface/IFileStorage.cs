@@ -9,9 +9,8 @@ namespace VoltSignature.Files.Interface
 {
     public interface IFileStorage
     {
-        Task<FileModel> Get(string id);
-        Task Remove(string id);
-        Task<string> Save(Stream imageStream, string imageName);
-        Task<string> Save(byte[] image, string imageName);
+        Task RemoveFile(string id, FileTypeEnum fileType);
+        Task<string> SaveFile(MemoryStream ms, string fileName, FileTypeEnum fileType);
+        Task<FileModel> GetFile(string id, FileTypeEnum fileType); 
     }
 }

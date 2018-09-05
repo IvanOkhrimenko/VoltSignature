@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using VoltSignature.DbCore.Entity; 
 using VoltSignature.DbCore.Repository;
 using VoltSignature.Files.Interface;
+using VoltSignature.Files.Model;
 using VoltSignature.Interface;
 using VoltSignature.Model.Account;
 using VoltSignature.Model.User;
@@ -19,14 +20,12 @@ namespace VoltSignature.Core.Services
     {
         private readonly IMapper _mapper;
         private readonly IStorage _storage;
-        private readonly IFileStorage _fileStore;
         private readonly IRepository<User> _userRepository;
 
         public UserService(IMapper mapper, IFileStorage fileStore, IStorage storage)
         {
             _mapper = mapper;
             _storage = storage;
-            _fileStore = fileStore;
             _userRepository = _storage.GetRepository<User>();
         }
 
@@ -77,10 +76,11 @@ namespace VoltSignature.Core.Services
             user.RegisterDate = DateTime.UtcNow;
             if (model.Image != null)
             {
+                var imageRepository = _storage.GetFileRepository(FileTypeEnum.Image);
                 using (MemoryStream ms = new MemoryStream())
                 {
                     await model.Image.CopyToAsync(ms);
-                    user.ImageId = await _fileStore.Save(ms, model.Image.FileName);
+                    user.ImageId = await imageRepository.Save(ms, model.Image.FileName);
                 }
             }
             await _userRepository.Create(user);
