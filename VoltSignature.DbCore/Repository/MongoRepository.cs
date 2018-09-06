@@ -1,5 +1,6 @@
 ﻿using MongoDB.Driver;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
@@ -41,6 +42,11 @@ namespace VoltSignature.DbCore.Repository
         public async Task<long> Count(Expression<Func<T, bool>> expression)
         {
             return await Collection.CountDocumentsAsync(expression);
+        }
+
+        public async Task<List<T>> GetList(Expression<Func<T, bool>> expression)
+        {
+            return await Collection.Find(expression).ToListAsync();
         }
     }
 }

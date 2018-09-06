@@ -11,6 +11,7 @@ namespace VoltSignature.Files.Interface
     {
         Task RemoveFile(string id, FileTypeEnum fileType);
         Task<string> SaveFile(MemoryStream ms, string fileName, FileTypeEnum fileType);
-        Task<FileModel> GetFile(string id, FileTypeEnum fileType); 
+        Task<FileModel> GetFile(string id, FileTypeEnum fileType);
+        Task<string> GetFileName(string id, FileTypeEnum fileType);
     }
 }

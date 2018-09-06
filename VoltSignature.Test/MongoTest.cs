@@ -164,6 +164,8 @@ namespace VoltSingature.Test
                 id = imageRepository.Save(ms.ToArray(), "test.jpg").Result;
             }
             Assert.IsNotNull(id);
+            string name = imageRepository.GetName(id).GetAwaiter().GetResult();
+            Assert.AreEqual(name, "test.jpg");
             var file = imageRepository.Get(id).Result;
             var newBase64 = Convert.ToBase64String(file.Data);
             Assert.AreEqual(bytes[30], file.Data[30]);

@@ -39,6 +39,11 @@ namespace VoltSignature.Files.Repository
                 return await _fileContext.SaveFile(ms, fileName, _fileType);
             }
         }
+
+        public async Task<string> GetName(string id)
+        {
+            return await _fileContext.GetFileName(id, _fileType);
+        }
     }
 
 

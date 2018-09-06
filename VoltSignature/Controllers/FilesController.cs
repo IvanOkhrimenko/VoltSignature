@@ -1,19 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO.Compression;
-using System.Linq;
+﻿using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
 using VoltSignature.Interface;
 
 namespace VoltSignature.UI.Controllers
-{ 
+{
     public class FilesController : BaseController
     {
-        IFileService _fileService;
-         
+        private IFileService _fileService;
 
         public FilesController(IFileService fileService)
         {
@@ -21,9 +14,16 @@ namespace VoltSignature.UI.Controllers
         }
 
         [HttpGet("/file/generateCertificate")]
-        public async Task<FileResult> GenerateCertificate()
+        public async Task<FileResult> GeneratePrivateKey()
         {
             var file = await _fileService.GeneratePrivateKey(CurrentUser);
+            return File(file.Data, "application/octet-stream", file.Name);
+        }
+
+        [HttpGet("/file/signature/{fileId}/{signatureId}")]
+        public async Task<FileResult> GetFileForSignature(string fileId, string signatureId)
+        {
+            var file = await _fileService.GetFileForSignature(fileId, signatureId, CurrentUser);
             return File(file.Data, "application/octet-stream", file.Name);
         }
 

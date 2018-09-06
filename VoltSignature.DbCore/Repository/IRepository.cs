@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 
@@ -13,5 +14,7 @@ namespace VoltSignature.DbCore.Repository
         Task Update(T entity);
 
         Task Remove(string id);
+
+        Task<List<T>> GetList(Expression<Func<T, bool>> expression);
     }
 }

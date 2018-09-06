@@ -7,6 +7,7 @@ namespace VoltSignature.Files.Model
     public enum FileTypeEnum
     {
         Image,
-        Certificate
+        Certificate,
+        SignatureFile,
     }
 }

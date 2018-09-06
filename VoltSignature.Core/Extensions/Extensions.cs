@@ -15,6 +15,7 @@ namespace VoltSignature.Core.Extensions
         {
             services.AddTransient<IUserService, UserService>();
             services.AddTransient<ICompanyService, CompanyService>();
+            services.AddTransient<ISignatureService, SignatureService>();
             services.AddTransient<IStorage, Storage.Storage>();
             services.AddTransient<IFileService, FileService>();
         }

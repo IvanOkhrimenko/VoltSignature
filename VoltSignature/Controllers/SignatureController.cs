@@ -1,25 +1,37 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+using VoltSignature.Common.Exceptions;
+using VoltSignature.Interface;
 using VoltSignature.Model.Signature;
 
 namespace VoltSignature.UI.Controllers
 { 
-    [ApiController]
     public class SignatureController : BaseController
     {
-        public SignatureController()
-        {
+        private readonly ISignatureService _signatureService;
 
+        public SignatureController(ISignatureService signatureService)
+        {
+            _signatureService = signatureService;
+        }
+
+
+        [HttpGet("api/signature")]
+        public async Task<List<SignatureModel>> CreateSignatureRequest()
+        { 
+            var result = await _signatureService.GetForSignature(CurrentUser);
+            return result;
         }
 
         [HttpPost("api/signature")]
-        public IActionResult CreateSignatureRequest([FromBody]SignatureRequest model)
+        public async Task<IActionResult> CreateSignatureRequest([FromBody]SignatureRequest model)
         {
-            throw new NotImplementedException();
+            if (!ModelState.IsValid)
+                throw new SignatureException("Not valid data to signature", System.Net.HttpStatusCode.BadRequest);
+            await _signatureService.CreateSignatureRequest(model, CurrentUser.Id);
+            return Ok();
         }
     }
 }

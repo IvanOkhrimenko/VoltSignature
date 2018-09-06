@@ -11,5 +11,6 @@ namespace VoltSignature.Interface
     {
         Task<FileModel> GeneratePrivateKey(CurrentUser currentUser);
         Task<FileModel> GetImage(string id);
+        Task<FileModel> GetFileForSignature(string fileId, string signatureId, CurrentUser currentUser);
     }
 }

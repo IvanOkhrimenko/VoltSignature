@@ -13,5 +13,6 @@ namespace VoltSignature.Files.Repository
         Task Remove(string id);
         Task<string> Save(MemoryStream ms, string fileName);
         Task<string> Save(byte[] file, string fileName);
+        Task<string> GetName(string id);
     }
 }

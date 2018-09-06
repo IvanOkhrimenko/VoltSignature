@@ -36,6 +36,21 @@ namespace VoltSignature.Core.Services
             return file;
         }
 
+        public async Task<FileModel> GetFileForSignature(string fileId, string signatureId, CurrentUser currentUser)
+        {
+            var fileRepository = _storage.GetFileRepository(FileTypeEnum.SignatureFile);
+            var signatureRepository = _storage.GetRepository<Signature>();
+            var signature = await signatureRepository.Get(x => x.Id == signatureId);
+            if (signature == null)
+                throw new SignatureException("Not found signature with id " + signatureId, System.Net.HttpStatusCode.NotFound);
+            if (!signature.UserSignatures.Exists(x => x.UserId == currentUser.Id) && signature.AuthorId != currentUser.Id)
+                throw new SignatureException("No access", System.Net.HttpStatusCode.Unauthorized);
+            if (signature.FileId != fileId)
+                throw new SignatureException("Invalid file id", System.Net.HttpStatusCode.BadRequest);
+            var file = await fileRepository.Get(fileId); 
+            return file ?? throw new SignatureException("File not found", System.Net.HttpStatusCode.NotFound);
+        }
+
         public async Task<FileModel> GetImage(string id)
         {
             var imageRepository = _storage.GetFileRepository(FileTypeEnum.Image);
