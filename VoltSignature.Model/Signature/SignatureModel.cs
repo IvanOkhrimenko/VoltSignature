@@ -6,7 +6,7 @@ namespace VoltSignature.Model.Signature
 {
     public class SignatureModel
     {
-        public string AuthroId { get; set; }
+        public string AuthorId { get; set; }
         public string FileId { get; set; }
         public string Note { get; set; }
         public DateTime CreateDate { get; set; }

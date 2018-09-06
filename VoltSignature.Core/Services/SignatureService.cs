@@ -10,6 +10,7 @@ using System.IO;
 using System.Threading.Tasks;
 using AutoMapper;
 using System.Linq;
+using System.Collections.Concurrent;
 
 namespace VoltSignature.Core.Services
 {
@@ -57,20 +58,19 @@ namespace VoltSignature.Core.Services
         public async Task<List<SignatureModel>> GetForSignature(CurrentUser user)
         {
             IRepository<User> userRepository = _storage.GetRepository<User>();
-            List<Signature> signatures = await _signatureRepository.GetList(x => x.UserSignatures.Exists(z => z.UserId == user.Id && z.SignatureHash == null));             
-            var authors = await userRepository.GetList(x => signatures.Exists(z => z.AuthorId == x.Id));
-            List<SignatureModel> result = new List<SignatureModel>();
-            foreach(Signature s in signatures)
+            List<Signature> signatures = await _signatureRepository.GetList(x => x.UserSignatures.Any(z => z.UserId == user.Id && z.SignatureHash == null));  
+            ConcurrentQueue<SignatureModel> result = new ConcurrentQueue<SignatureModel>();
+            Parallel.ForEach(signatures, s =>
             {
                 SignatureModel signViewModel = _mapper.Map<Signature, SignatureModel>(s);
-                User current = authors.FirstOrDefault(x => x.Id == signViewModel.AuthroId);
+                User current = userRepository.Get(z => z.Id == s.AuthorId).GetAwaiter().GetResult();
                 signViewModel.AuthorEmail = current.Email;
                 signViewModel.AuthorFullName = current.FullName;
                 signViewModel.ImageId = current.ImageId;
-                signViewModel.FileName = await _filesRepository.GetName(signViewModel.FileId);
-                result.Add(signViewModel);
-            }
-            return result;
+                signViewModel.FileName =   _filesRepository.GetName(signViewModel.FileId).GetAwaiter().GetResult();
+                result.Enqueue(signViewModel);
+            }); 
+            return result.ToList();
         }
     }
 }
