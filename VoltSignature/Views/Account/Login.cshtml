@@ -4,10 +4,10 @@
 }
 
 
-<div style="margin-top:15em" class="row">
-    <div class="col-lg-3 col-centered">
+<div style="margin-top:12em" class="row">
+    <div class="col-xs-4 col-centered">
 
-        <div class="panel panel-default">
+        <div style="padding: 2em;" class="panel panel-default">
             <div class="panel-heading">
                 <h3 class="panel-title">Please sign in</h3>
             </div>
@@ -22,6 +22,12 @@
                             <input class="form-control" placeholder="Password" asp-for="Password" name="Password" type="password" value="">
                             <span style="color:red" asp-validation-for="Password"></span>
                         </div>
+                        @if (!string.IsNullOrEmpty(ViewBag.error))
+                        {
+                            <div class="alert alert-danger">
+                              @ViewBag.error
+                            </div>
+                        }
                         <div class="checkbox">
                             <label>
                                 <input name="remember" type="checkbox" value="Remember Me"> Remember Me

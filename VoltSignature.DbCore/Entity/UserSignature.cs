@@ -6,5 +6,6 @@ namespace VoltSignature.DbCore.Entity
     { 
         public byte[] SignatureHash { get; set; }  
         public string UserId { get; set; }  
+        public bool Rejected { get; set; }
     }
 }

@@ -52,7 +52,10 @@ namespace VoltSignature.UI.Controllers
                 return View(model);
             var user = await _userService.LoginUser(model.Login, model.Password);
             if (user == null)
+            {
+                ViewBag.error = "Invalid login or password";
                 return View(model);
+            }
             await Authenticate(user);
             return RedirectToAction("Index", "Home");
         }
