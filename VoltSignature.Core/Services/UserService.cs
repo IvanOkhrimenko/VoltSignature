@@ -1,9 +1,14 @@
 ﻿using AutoMapper;
+using ExpressionBuilder.Common;
+using ExpressionBuilder.Generics;
+using ExpressionBuilder.Interfaces;
 using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.IO;
+using System.Linq;
+using System.Linq.Expressions;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using VoltSignature.DbCore.Entity; 
@@ -22,7 +27,7 @@ namespace VoltSignature.Core.Services
         private readonly IStorage _storage;
         private readonly IRepository<User> _userRepository;
 
-        public UserService(IMapper mapper, IFileStorage fileStore, IStorage storage)
+        public UserService(IMapper mapper, IStorage storage)
         {
             _mapper = mapper;
             _storage = storage;
@@ -85,6 +90,20 @@ namespace VoltSignature.Core.Services
             }
             await _userRepository.Create(user);
             return _mapper.Map<User, UserModel>(user);
+        }
+
+
+        public async Task<List<UserModel>> FindUsers(string first,string last,string email)
+        { 
+            var filter = new Filter<User>();  
+            if (!string.IsNullOrEmpty(first)) 
+                filter.By("FirstName", Operation.Contains, first, connector: FilterStatementConnector.Or); 
+            if (!string.IsNullOrEmpty(last)) 
+                 filter.By("LastName", Operation.Contains, last, connector: FilterStatementConnector.Or); 
+            if (!string.IsNullOrEmpty(email)) 
+                filter.By("Email", Operation.Contains, email, connector: FilterStatementConnector.And); 
+            List<User> users = await _userRepository.GetList(filter.Expression);
+            return _mapper.Map<List<User>, List<UserModel>>(users);
         }
     }
 }

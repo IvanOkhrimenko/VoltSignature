@@ -1,5 +1,8 @@
 ﻿using AutoMapper;
+using ExpressionBuilder.Common;
+using ExpressionBuilder.Generics;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using VoltSignature.DbCore.Entity;
 using VoltSignature.DbCore.Repository;
@@ -28,6 +31,15 @@ namespace VoltSignature.Core.Services
                 throw new Exception("Not found company by id " + Id);
             var result = _mapper.Map<Company, CompanyModel>(company);
             return result;
+        }
+
+        public async Task<List<CompanyModel>> FindCompanys(string name)
+        {
+            var filter = new Filter<Company>();
+            if (!string.IsNullOrEmpty(name))
+                filter.By("Name", Operation.Contains, name, connector: FilterStatementConnector.Or); 
+            List<Company> users = await _companyRepository.GetList(filter.Expression);
+            return _mapper.Map<List<Company>, List<CompanyModel>>(users);
         }
     }
 }

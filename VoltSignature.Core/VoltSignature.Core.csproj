@@ -16,6 +16,7 @@
     <ProjectReference Include="..\VoltSignature.Files\VoltSignature.Files.csproj" />
     <ProjectReference Include="..\VoltSignature.Interface\VoltSignature.Interface.csproj" />
     <ProjectReference Include="..\VoltSignature.Model\VoltSignature.Model.csproj" />
+    <ProjectReference Include="..\VoltSignature.SearchEngine\VoltSignature.SearchEngine.csproj" />
   </ItemGroup>
 
 </Project>
